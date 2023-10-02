@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
 
-public class FilmValidator implements ConstraintValidator<CorrectDate, LocalDate>{
+public class FilmValidator implements ConstraintValidator <CorrectDate, LocalDate> {
 
     @Override
     public void initialize(CorrectDate constraintAnnotation) {

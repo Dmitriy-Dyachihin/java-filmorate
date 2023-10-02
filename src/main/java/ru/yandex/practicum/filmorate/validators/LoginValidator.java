@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.anotations.CorrectLogin;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class LoginValidator implements ConstraintValidator<CorrectLogin, String> {
+public class LoginValidator implements ConstraintValidator <CorrectLogin, String> {
 
     @Override
     public void initialize(CorrectLogin constraintAnnotation) {
