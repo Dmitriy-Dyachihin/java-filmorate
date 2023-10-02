@@ -37,7 +37,7 @@ public class FilmManager {
     }
 
     public void validate(Film film, String message) throws ValidationException {
-        if(film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
         }
         log.debug("{} фильм {}", message, film.getName());
