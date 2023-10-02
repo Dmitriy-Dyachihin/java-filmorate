@@ -17,7 +17,7 @@ public class FilmController {
     private final FilmManager filmManager = new FilmManager();
 
     @GetMapping
-    public List<Film> getFilms () {
+    public List<Film> getFilms() {
         List<Film> films = new ArrayList<>(filmManager.getFilms().values());
         log.debug("Текущее количество фильмов: {}", films.size());
         return films;
@@ -25,7 +25,7 @@ public class FilmController {
 
     @PostMapping
     public Film addFilm(@Valid @RequestBody Film film) throws ValidationException {
-        if(filmManager.getFilms().containsKey(film.getId())) {
+        if (filmManager.getFilms().containsKey(film.getId())) {
             throw new RuntimeException("Уже есть такой фильм");
         }
         filmManager.validate(film, "Добавлен");
@@ -34,7 +34,7 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) throws ValidationException {
-        if(!filmManager.getFilms().containsKey(film.getId())) {
+        if (!filmManager.getFilms().containsKey(film.getId())) {
             throw new RuntimeException("Нет такого фильма");
         }
         filmManager.validate(film, "Обновлен");
