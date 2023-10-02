@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User addUser(@Valid @RequestBody User user) {
+        public User addUser(@Valid @RequestBody User user) {
         if(userManager.getUsers().containsKey(user.getId())) {
             throw new RuntimeException("Уже есть такой пользователь");
         }
@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(@RequestBody User user) {
+    public User updateUser(@Valid @RequestBody User user) {
         if(!userManager.getUsers().containsKey(user.getId())) {
             throw new RuntimeException("Нет такого пользователя");
         }
