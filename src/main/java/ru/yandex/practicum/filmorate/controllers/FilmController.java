@@ -27,17 +27,19 @@ public class FilmController {
     public Film addFilm(@Valid @RequestBody Film film) throws ValidationException {
         if (filmManager.getFilms().containsKey(film.getId())) {
             throw new RuntimeException("Уже есть такой фильм");
+        } else {
+            filmManager.validate(film, "Добавлен");
+            return filmManager.addFilm(film);
         }
-        filmManager.validate(film, "Добавлен");
-        return filmManager.addFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) throws ValidationException {
         if (!filmManager.getFilms().containsKey(film.getId())) {
             throw new RuntimeException("Нет такого фильма");
+        } else {
+            filmManager.validate(film, "Обновлен");
+            return filmManager.updateFilm(film);
         }
-        filmManager.validate(film, "Обновлен");
-        return filmManager.updateFilm(film);
     }
 }

@@ -18,7 +18,7 @@ import java.util.Map;
 public class FilmManager {
 
     private final Map<Integer, Film> films = new HashMap<>();
-    private static int id;
+    private static int id = 0;
 
     public int assignId() {
         return ++id;

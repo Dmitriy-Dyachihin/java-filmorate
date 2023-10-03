@@ -14,9 +14,9 @@ public class LoginValidator implements ConstraintValidator<CorrectLogin, String>
 
     @Override
     public boolean isValid(String login, ConstraintValidatorContext constraintValidatorContext) {
-        if (login.isEmpty()) {
+        if (login == null) {
             return true;
         }
-        return !(login.isBlank());
+        return !(login.contains(" "));
     }
 }

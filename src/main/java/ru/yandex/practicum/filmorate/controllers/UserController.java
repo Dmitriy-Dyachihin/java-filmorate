@@ -27,17 +27,19 @@ public class UserController {
         public User addUser(@Valid @RequestBody User user) {
         if (userManager.getUsers().containsKey(user.getId())) {
             throw new RuntimeException("Уже есть такой пользователь");
+        } else {
+            userManager.validate(user, "Добавлен");
+            return userManager.addUser(user);
         }
-        userManager.validate(user, "Добавлен");
-        return userManager.addUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
         if (!userManager.getUsers().containsKey(user.getId())) {
             throw new RuntimeException("Нет такого пользователя");
+        } else {
+            userManager.validate(user, "Обновлен");
+            return userManager.updateUser(user);
         }
-        userManager.validate(user, "Обновлен");
-        return userManager.updateUser(user);
     }
 }

@@ -16,7 +16,7 @@ import java.util.Map;
 public class UserManager {
 
     private final Map<Integer, User> users = new HashMap<>();
-    private static int id;
+    private static int id = 0;
 
     public int assignId() {
         return ++id;
