@@ -4,8 +4,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +37,13 @@ public class UserManager {
     }
 
     public void validate(User user, String message) {
+        if (!user.getEmail().contains("@") || user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new ValidationException("Почта не может быть пустой и должна содержать @");
+        } else if (user.getLogin() == null || user.getLogin().contains(" ")) {
+            throw new ValidationException("Логин не может быть пустым и не должен содержать пробелы");
+        } else if (user.getBirthday().isAfter(LocalDate.now())) {
+            throw new ValidationException("Дата рождения не может быть в будущем");
+        }
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }

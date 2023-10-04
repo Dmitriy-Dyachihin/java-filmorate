@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.manager.FilmManager;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -24,7 +23,7 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film addFilm(@Valid @RequestBody Film film) throws ValidationException {
+    public Film addFilm(@Valid @RequestBody Film film) {
         if (filmManager.getFilms().containsKey(film.getId())) {
             throw new RuntimeException("Уже есть такой фильм");
         } else {
@@ -34,7 +33,7 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film updateFilm(@Valid @RequestBody Film film) throws ValidationException {
+    public Film updateFilm(@Valid @RequestBody Film film) {
         if (!filmManager.getFilms().containsKey(film.getId())) {
             throw new RuntimeException("Нет такого фильма");
         } else {
