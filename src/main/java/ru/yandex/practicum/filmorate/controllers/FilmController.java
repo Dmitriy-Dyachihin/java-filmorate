@@ -17,14 +17,14 @@ public class FilmController {
 
     @GetMapping
     public List<Film> getFilms() {
-        List<Film> films = new ArrayList<>(filmManager.getFilms().values());
+        List<Film> films = new ArrayList<>(filmManager.getAllFilms().values());
         log.debug("Текущее количество фильмов: {}", films.size());
         return films;
     }
 
     @PostMapping
     public Film addFilm(@Valid @RequestBody Film film) {
-        if (filmManager.getFilms().containsKey(film.getId())) {
+        if (filmManager.getAllFilms().containsKey(film.getId())) {
             throw new RuntimeException("Уже есть такой фильм");
         } else {
             filmManager.validate(film, "Добавлен");
@@ -34,7 +34,7 @@ public class FilmController {
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film film) {
-        if (!filmManager.getFilms().containsKey(film.getId())) {
+        if (!filmManager.getAllFilms().containsKey(film.getId())) {
             throw new RuntimeException("Нет такого фильма");
         } else {
             filmManager.validate(film, "Обновлен");

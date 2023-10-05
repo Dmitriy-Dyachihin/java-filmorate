@@ -1,7 +1,5 @@
 package ru.yandex.practicum.filmorate.manager;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -11,8 +9,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
-@EqualsAndHashCode
 @ToString
 @Slf4j
 public class UserManager {
@@ -34,6 +30,10 @@ public class UserManager {
     public User updateUser(User user) {
         users.put(user.getId(), user);
         return user;
+    }
+
+    public Map<Integer, User> getAllUsers() {
+        return users;
     }
 
     public void validate(User user, String message) {

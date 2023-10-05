@@ -1,7 +1,5 @@
 package ru.yandex.practicum.filmorate.manager;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -11,8 +9,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-@Getter
-@EqualsAndHashCode
 @ToString
 @Slf4j
 public class FilmManager {
@@ -34,6 +30,10 @@ public class FilmManager {
     public Film updateFilm(Film film) {
         films.put(film.getId(), film);
         return film;
+    }
+
+    public Map<Integer, Film> getAllFilms() {
+        return films;
     }
 
     public void validate(Film film, String message) throws ValidationException {

@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import javax.validation.constraints.*;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.anotations.CorrectLogin;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class User {
     @PositiveOrZero(message = "Id не может быть отрицательным")
     private int id;

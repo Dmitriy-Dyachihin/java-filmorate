@@ -18,14 +18,14 @@ public class UserController {
 
     @GetMapping
     public List<User> getUsers() {
-        List<User> users = new ArrayList<>(userManager.getUsers().values());
+        List<User> users = new ArrayList<>(userManager.getAllUsers().values());
         log.debug("Текущее количество пользователей: {}", users.size());
         return users;
     }
 
     @PostMapping
         public User addUser(@Valid @RequestBody User user) {
-        if (userManager.getUsers().containsKey(user.getId())) {
+        if (userManager.getAllUsers().containsKey(user.getId())) {
             throw new RuntimeException("Уже есть такой пользователь");
         } else {
             userManager.validate(user, "Добавлен");
@@ -35,7 +35,7 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        if (!userManager.getUsers().containsKey(user.getId())) {
+        if (!userManager.getAllUsers().containsKey(user.getId())) {
             throw new RuntimeException("Нет такого пользователя");
         } else {
             userManager.validate(user, "Обновлен");
