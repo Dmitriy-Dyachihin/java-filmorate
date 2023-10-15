@@ -1,10 +1,13 @@
 package ru.yandex.practicum.filmorate.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,7 +19,17 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class FilmControllerTest {
 
-    private final FilmController filmController = new FilmController();
+    private InMemoryFilmStorage filmStorage;
+    private FilmService filmService;
+
+    private FilmController filmController;
+
+    @BeforeEach
+    void tune() {
+        filmStorage = new InMemoryFilmStorage();
+        filmService = new FilmService(filmStorage);
+        filmController = new FilmController(filmService);
+    }
 
     @Test
     void shouldAddFilm() {

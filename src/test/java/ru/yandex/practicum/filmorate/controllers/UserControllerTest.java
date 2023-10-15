@@ -1,9 +1,13 @@
 package ru.yandex.practicum.filmorate.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,9 +16,20 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 class UserControllerTest {
 
-    private final UserController userController = new UserController();
+    private InMemoryUserStorage userStorage;
+    private UserService userService;
+
+    private UserController userController;
+
+    @BeforeEach
+    void tune() {
+        userStorage = new InMemoryUserStorage();
+        userService = new UserService(userStorage);
+        userController = new UserController(userService);
+    }
 
     @Test
     void shouldAddUser() {
