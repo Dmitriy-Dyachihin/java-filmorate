@@ -52,7 +52,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public List<User> getFriendsOfUser(Integer userId) {
+    public List<User>   getFriendsOfUser(Integer userId) {
         return users.get(userId).getFriends()
                 .stream()
                 .map(users::get)
@@ -60,6 +60,9 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     public void addFriend(Integer userId, Integer friendId) {
+        if (!users.containsKey(userId) || !users.containsKey(friendId)) {
+            throw new UserDontExistException("Пользователь с заданным id не существует");
+        }
         getUserById(userId).getFriends().add(friendId);
     }
 

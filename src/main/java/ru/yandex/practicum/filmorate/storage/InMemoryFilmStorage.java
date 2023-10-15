@@ -48,10 +48,10 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film getFilmById(Integer filmId) {
-        if (!films.containsKey(id)) {
+        if (!films.containsKey(filmId)) {
             throw new FilmDontExistException("Такого фильма не существует");
         }
-        return films.get(id);
+        return films.get(filmId);
     }
 
     @Override
@@ -65,11 +65,17 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void addLike(Integer filmId, Integer userId) {
+        if (!films.containsKey(filmId) || !films.containsKey(userId)) {
+            throw new FilmDontExistException("Такого фильма не существует");
+        }
         getFilmById(filmId).getLikes().add(userId);
     }
 
     @Override
     public void removeLike(Integer filmId, Integer userId) {
+        if (!films.containsKey(filmId) || !films.containsKey(userId)) {
+            throw new FilmDontExistException("Такого фильма не существует");
+        }
         getFilmById(filmId).getLikes().remove(userId);
     }
 
