@@ -21,11 +21,13 @@ public class UserService {
 
     public User createUser(User user) {
         validate(user, "Добавлен");
+        log.info("Добавлен пользователь {}", user.getName());
         return userStorage.addUser(user);
     }
 
     public User updateUser(User user) {
         validate(user, "Обновлен");
+        log.info("Обновлен пользователь {}", user.getName());
         return userStorage.updateUser(user);
     }
 
@@ -63,7 +65,7 @@ public class UserService {
                 .collect(Collectors.toSet());
     }
 
-    public void validate(User user, String message) {
+    private void validate(User user, String message) {
         if (!user.getEmail().contains("@") || user.getEmail() == null || user.getEmail().isBlank()) {
             throw new ValidationException("Почта не может быть пустой и должна содержать @");
         } else if (user.getLogin() == null || user.getLogin().contains(" ")) {

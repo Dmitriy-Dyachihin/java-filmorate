@@ -19,11 +19,13 @@ public class FilmService {
 
     public Film createFilm(Film film) {
         validate(film, "Добавлен");
+        log.info("Добавлен фильм {}", film.getName());
         return filmStorage.addFilm(film);
     }
 
     public Film updateFilm(Film film) {
         validate(film, "Обновлен");
+        log.info("Обновлен фильм {}", film.getName());
         return filmStorage.updateFilm(film);
     }
 
@@ -49,7 +51,7 @@ public class FilmService {
         log.info("Удален лайк у фильма {}", filmStorage.getFilmById(filmId).getName());
     }
 
-    public void validate(Film film, String message) throws ValidationException {
+    private void validate(Film film, String message) throws ValidationException {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
         } else if (film.getName() == null || film.getName().isBlank()) {
