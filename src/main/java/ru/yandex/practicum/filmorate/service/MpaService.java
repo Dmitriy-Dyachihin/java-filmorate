@@ -13,7 +13,7 @@ public class MpaService {
 
     private final MpaDaoImpl mpaDao;
 
-    public Collection<Mpa> GetMpa() {
+    public Collection<Mpa> getMpa() {
         return mpaDao.getMpa();
     }
 

@@ -22,7 +22,7 @@ public class MpaController {
     @GetMapping
     public Collection<Mpa> getMpa() {
         log.info("Получен GET-запрос к эндпоинту - /mpa");
-        return mpaService.GetMpa();
+        return mpaService.getMpa();
     }
 
     @GetMapping("/{id}")
