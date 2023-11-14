@@ -15,7 +15,7 @@ import java.util.Collection;
 @Slf4j
 @Repository
 @AllArgsConstructor
-public class GenreDaoImpl implements GenreDao{
+public class GenreDaoImpl implements GenreDao {
 
     JdbcTemplate jdbcTemplate;
 
@@ -38,7 +38,7 @@ public class GenreDaoImpl implements GenreDao{
         Genre genre;
         try {
             genre = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeGenre(rs, rowNum), genreId);
-        } catch(EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("Не существует жанра с указанным id = " + genreId);
         }
         return genre;
@@ -46,9 +46,9 @@ public class GenreDaoImpl implements GenreDao{
 
     @Override
     public void addGenreToFilm(int filmId, Collection<Genre> genres) {
-        for(Genre genre : genres){
+        for (Genre genre : genres) {
             String check = "SELECT * FROM film_genre WHERE film_id = ? AND genre_id = ?";
-            if(!(jdbcTemplate.queryForRowSet(check, filmId, genre.getId()).next())){
+            if (!(jdbcTemplate.queryForRowSet(check, filmId, genre.getId()).next())) {
                 String sql = "INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?)";
                 jdbcTemplate.update(sql, filmId, genre.getId());
             }

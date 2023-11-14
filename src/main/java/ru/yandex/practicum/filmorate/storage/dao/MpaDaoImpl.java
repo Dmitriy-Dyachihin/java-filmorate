@@ -15,7 +15,7 @@ import java.util.Collection;
 @Repository
 @Slf4j
 @AllArgsConstructor
-public class MpaDaoImpl implements MpaDao{
+public class MpaDaoImpl implements MpaDao {
 
     JdbcTemplate jdbcTemplate;
 
@@ -29,9 +29,9 @@ public class MpaDaoImpl implements MpaDao{
     public Mpa getMpaById(int mpaId) {
         String sql = "SELECT * FROM mpa WHERE mpa_id = ?";
         Mpa mpa;
-        try{
+        try {
             mpa = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeMpa(rs, rowNum), mpaId);
-        } catch(EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new NotFoundException("Нет рейтинга с id = " + mpaId);
         }
         return mpa;

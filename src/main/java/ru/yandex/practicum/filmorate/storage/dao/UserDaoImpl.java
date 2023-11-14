@@ -23,7 +23,7 @@ import java.util.Objects;
 @Repository
 @Slf4j
 @AllArgsConstructor
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
 
     JdbcTemplate jdbcTemplate;
 
@@ -31,7 +31,7 @@ public class UserDaoImpl implements UserDao{
     public User addUser(User user) {
         String sql = "INSERT INTO users (email, login, name, birthdate) VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection ->{
+        jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"user_id"});
             ps.setString(1, user.getEmail());
             ps.setString(2, user.getLogin());
@@ -62,7 +62,7 @@ public class UserDaoImpl implements UserDao{
         User user;
         try {
             user = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeUser(rs, rowNum), id);
-        } catch(EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new UserDontExistException("Пользователь с указанным id не существует");
         }
         return user;

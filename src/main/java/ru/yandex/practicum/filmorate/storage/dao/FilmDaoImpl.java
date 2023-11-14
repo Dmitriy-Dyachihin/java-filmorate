@@ -25,7 +25,7 @@ import java.util.Objects;
 @Repository
 @Slf4j
 @AllArgsConstructor
-public class FilmDaoImpl implements FilmDao{
+public class FilmDaoImpl implements FilmDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final GenreDaoImpl genreDao;
@@ -59,7 +59,7 @@ public class FilmDaoImpl implements FilmDao{
         jdbcTemplate.update(sql, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(),
                 film.getMpa().getId(), film.getId());
         genreDao.removeFilmGenres(film.getId());
-        if(!film.getGenres().isEmpty()){
+        if (!film.getGenres().isEmpty()) {
             genreDao.addGenreToFilm(film.getId(), film.getGenres());
         }
         return getFilmById(film.getId());
@@ -75,7 +75,7 @@ public class FilmDaoImpl implements FilmDao{
     public Film getFilmById(Integer id) {
         String sql = "SELECT * FROM film AS f INNER JOIN mpa AS m ON f.mpa_id = m.mpa_id WHERE film_id = ?";
         Film film;
-        try{
+        try {
             film = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> makeFilm(rs, rowNum), id);
         } catch (EmptyResultDataAccessException e) {
             throw new FilmDontExistException("Не существует фильма с указанным id");
@@ -115,7 +115,7 @@ public class FilmDaoImpl implements FilmDao{
         String sql = "INSERT INTO likes (film_id, user_id) VALUES (?, ?)";
         String sqlLike = "SELECT * FROM likes WHERE film_id = ? AND user_id = ?";
         SqlRowSet haveLiked = jdbcTemplate.queryForRowSet(sqlLike, filmId, userId);
-        if(!haveLiked.next()) {
+        if (!haveLiked.next()) {
             jdbcTemplate.update(sql, filmId, userId);
         }
     }
