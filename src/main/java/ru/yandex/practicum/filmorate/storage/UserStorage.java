@@ -15,9 +15,4 @@ public interface UserStorage {
 
     User getUserById(Integer id);
 
-    List<User> getFriendsOfUser(Integer userId);
-
-    void addFriend(Integer userId, Integer friendId);
-
-    Set<Integer> getFriendsId(Integer id);
 }

@@ -5,17 +5,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.dao.FilmDaoImpl;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Collection;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class FilmService {
 
-    private final InMemoryFilmStorage filmStorage;
+    private final FilmDaoImpl filmStorage;
 
     public Film createFilm(Film film) {
         validate(film, "Добавлен");
@@ -29,7 +29,7 @@ public class FilmService {
         return filmStorage.updateFilm(film);
     }
 
-    public List<Film> getAllFilms() {
+    public Collection<Film> getAllFilms() {
         return filmStorage.getFilms();
     }
 
@@ -37,7 +37,7 @@ public class FilmService {
         return filmStorage.getFilmById(id);
     }
 
-    public List<Film> getPopularFilms(Integer count) {
+    public Collection<Film> getPopularFilms(Integer count) {
         return filmStorage.getPopularFilms(count);
     }
 
