@@ -17,7 +17,7 @@ import java.util.Collection;
 @AllArgsConstructor
 public class MpaDaoImpl implements MpaDao {
 
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Collection<Mpa> getMpa() {

@@ -25,7 +25,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class UserDaoImpl implements UserDao {
 
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public User addUser(User user) {

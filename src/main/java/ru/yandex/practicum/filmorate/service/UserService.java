@@ -15,50 +15,50 @@ import java.util.Collection;
 @Service
 public class UserService {
 
-    private final UserDaoImpl userStorage;
+    private final UserDaoImpl userDao;
 
     public User createUser(User user) {
         validate(user);
         log.info("Добавлен пользователь {}", user.getName());
-        return userStorage.addUser(user);
+        return userDao.addUser(user);
     }
 
     public User updateUser(User user) {
         validate(user);
         log.info("Обновлен пользователь {}", user.getName());
-        return userStorage.updateUser(user);
+        return userDao.updateUser(user);
     }
 
     public Collection<User> getAllUsers() {
-        return userStorage.getUsers();
+        return userDao.getUsers();
     }
 
     public User getUserById(Integer userId) {
-        return userStorage.getUserById(userId);
+        return userDao.getUserById(userId);
     }
 
     public void addFriend(Integer userId, Integer friendId) {
-        userStorage.getUserById(userId);
-        userStorage.getUserById(friendId);
-        userStorage.addFriend(userId, friendId);
-        log.debug("Пользователь {} добавил в друзья пользователя {}", userStorage.getUserById(userId).getName(),
-                userStorage.getUserById(friendId).getName());
+        userDao.getUserById(userId);
+        userDao.getUserById(friendId);
+        userDao.addFriend(userId, friendId);
+        log.debug("Пользователь {} добавил в друзья пользователя {}", userDao.getUserById(userId).getName(),
+                userDao.getUserById(friendId).getName());
     }
 
     public void removeFriend(Integer userId, Integer friendId) {
-        userStorage.getUserById(userId);
-        userStorage.getUserById(friendId);
-        userStorage.removeFriend(userId, friendId);
-        log.debug("Пользователь {} удалил из друзей пользователя {}", userStorage.getUserById(userId).getName(),
-                userStorage.getUserById(friendId).getName());
+        userDao.getUserById(userId);
+        userDao.getUserById(friendId);
+        userDao.removeFriend(userId, friendId);
+        log.debug("Пользователь {} удалил из друзей пользователя {}", userDao.getUserById(userId).getName(),
+                userDao.getUserById(friendId).getName());
     }
 
     public Collection<User> getFriendsOfUser(Integer userId) {
-        return userStorage.getFriendsOfUser(userId);
+        return userDao.getFriendsOfUser(userId);
     }
 
     public Collection<User> getCommonFriends(Integer userId, Integer friendId) {
-        return userStorage.getCommonFriends(userId, friendId);
+        return userDao.getCommonFriends(userId, friendId);
     }
 
     private void validate(User user) {

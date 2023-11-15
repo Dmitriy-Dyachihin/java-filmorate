@@ -17,7 +17,7 @@ import java.util.Collection;
 @AllArgsConstructor
 public class GenreDaoImpl implements GenreDao {
 
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Collection<Genre> getGenres() {

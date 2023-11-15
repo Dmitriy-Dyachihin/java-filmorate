@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
@@ -17,6 +17,6 @@ public class Genre {
     private int id;
 
     @NotBlank
-    @NotEmpty
+    @NotNull
     private String name;
 }

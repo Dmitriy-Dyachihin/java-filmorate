@@ -15,40 +15,40 @@ import java.util.Collection;
 @Service
 public class FilmService {
 
-    private final FilmDaoImpl filmStorage;
+    private final FilmDaoImpl filmDao;
 
     public Film createFilm(Film film) {
         validate(film, "Добавлен");
         log.info("Добавлен фильм {}", film.getName());
-        return filmStorage.addFilm(film);
+        return filmDao.addFilm(film);
     }
 
     public Film updateFilm(Film film) {
         validate(film, "Обновлен");
         log.info("Обновлен фильм {}", film.getName());
-        return filmStorage.updateFilm(film);
+        return filmDao.updateFilm(film);
     }
 
     public Collection<Film> getAllFilms() {
-        return filmStorage.getFilms();
+        return filmDao.getFilms();
     }
 
     public Film getFilmById(Integer id) {
-        return filmStorage.getFilmById(id);
+        return filmDao.getFilmById(id);
     }
 
     public Collection<Film> getPopularFilms(Integer count) {
-        return filmStorage.getPopularFilms(count);
+        return filmDao.getPopularFilms(count);
     }
 
     public void addLike(Integer filmId, Integer userId) {
-        filmStorage.addLike(filmId, userId);
-        log.info("Добавлен лайк фильму {}", filmStorage.getFilmById(filmId).getName());
+        filmDao.addLike(filmId, userId);
+        log.info("Добавлен лайк фильму {}", filmDao.getFilmById(filmId).getName());
     }
 
     public void removeLIke(Integer filmId, Integer userId) {
-        filmStorage.removeLike(filmId, userId);
-        log.info("Удален лайк у фильма {}", filmStorage.getFilmById(filmId).getName());
+        filmDao.removeLike(filmId, userId);
+        log.info("Удален лайк у фильма {}", filmDao.getFilmById(filmId).getName());
     }
 
     private void validate(Film film, String message) throws ValidationException {
