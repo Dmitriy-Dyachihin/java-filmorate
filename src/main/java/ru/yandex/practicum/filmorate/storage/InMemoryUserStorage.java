@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.exceptions.UserDontExistException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
@@ -49,25 +48,6 @@ public class InMemoryUserStorage implements UserStorage {
             throw new UserDontExistException("Пользователь с заданным id не существует");
         }
         return users.get(id);
-    }
-
-    @Override
-    public List<User>   getFriendsOfUser(Integer userId) {
-        return users.get(userId).getFriends()
-                .stream()
-                .map(users::get)
-                .collect(Collectors.toList());
-    }
-
-    public void addFriend(Integer userId, Integer friendId) {
-        if (!users.containsKey(userId) || !users.containsKey(friendId)) {
-            throw new UserDontExistException("Пользователь с заданным id не существует");
-        }
-        getUserById(userId).getFriends().add(friendId);
-    }
-
-    public Set<Integer> getFriendsId(Integer id) {
-        return getUserById(id).getFriends();
     }
 
 }

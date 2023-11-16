@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
@@ -52,31 +51,6 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new FilmDontExistException("Такого фильма не существует");
         }
         return films.get(filmId);
-    }
-
-    @Override
-    public List<Film> getPopularFilms(Integer count) {
-        return getFilms().stream()
-                .filter(film -> film.getLikes() != null)
-                .sorted((film1, film2) -> film2.getLikes().size() - film1.getLikes().size())
-                .limit(count)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void addLike(Integer filmId, Integer userId) {
-        if (!films.containsKey(filmId) || !films.containsKey(userId)) {
-            throw new FilmDontExistException("Такого фильма не существует");
-        }
-        getFilmById(filmId).getLikes().add(userId);
-    }
-
-    @Override
-    public void removeLike(Integer filmId, Integer userId) {
-        if (!films.containsKey(filmId) || !films.containsKey(userId)) {
-            throw new FilmDontExistException("Такого фильма не существует");
-        }
-        getFilmById(filmId).getLikes().remove(userId);
     }
 
 }

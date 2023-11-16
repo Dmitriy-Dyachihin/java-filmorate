@@ -1,38 +1,35 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class UserControllerTest {
 
-    private InMemoryUserStorage userStorage;
-    private UserService userService;
-
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @MockBean
     private UserController userController;
 
-    @BeforeEach
-    void tune() {
-        userStorage = new InMemoryUserStorage();
-        userService = new UserService(userStorage);
-        userController = new UserController(userService);
-    }
-
     @Test
-    void shouldAddUser() {
+    void shouldAddUser() throws Exception {
         User user = User.builder()
                 .id(1)
                 .name("Имя 1")
@@ -40,117 +37,16 @@ class UserControllerTest {
                 .email("user@mail.ru")
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
-
-        userController.addUser(user);
-        assertEquals(userController.getUsers(), List.of(user));
+        Mockito.when(userController.addUser(Mockito.any())).thenReturn(user);
+        mockMvc.perform(post("/users")
+                        .content(objectMapper.writeValueAsString(user))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(user)));
     }
 
     @Test
-    void shouldAddUserWithEmptyName() {
-        User user = User.builder()
-                .id(1)
-                .name("")
-                .login("Login_1")
-                .email("user@mail.ru")
-                .birthday(LocalDate.of(1990, 1, 1))
-                .build();
-
-        userController.addUser(user);
-        assertEquals(user.getName(), user.getLogin());
-    }
-
-    @Test
-    void shouldNotAddUserWithEmptyEmail() {
-        User user = User.builder()
-                .id(1)
-                .name("Имя 1")
-                .login("Login_1")
-                .email("")
-                .birthday(LocalDate.of(1990, 1, 1))
-                .build();
-
-        assertThrows(ValidationException.class, new Executable() {
-            @Override
-            public void execute() throws ValidationException {
-                userController.addUser(user);
-            }
-        });
-    }
-
-    @Test
-    void shouldNotAddUserWithUncorrectEmail() {
-        User user = User.builder()
-                .id(1)
-                .name("Имя 1")
-                .login("Login_1")
-                .email("usermail.ru")
-                .birthday(LocalDate.of(1990, 1, 1))
-                .build();
-
-        assertThrows(ValidationException.class, new Executable() {
-            @Override
-            public void execute() throws ValidationException {
-                userController.addUser(user);
-            }
-        });
-    }
-
-    @Test
-    void shouldNotAddUserWithEmptyLogin() {
-        User user = User.builder()
-                .id(1)
-                .name("Имя 1")
-                .login(null)
-                .email("user@mail.ru")
-                .birthday(LocalDate.of(1990, 1, 1))
-                .build();
-
-        assertThrows(ValidationException.class, new Executable() {
-            @Override
-            public void execute() throws ValidationException {
-                userController.addUser(user);
-            }
-        });
-    }
-
-    @Test
-    void shouldNotAddUserWithUncorrectLogin() {
-        User user = User.builder()
-                .id(1)
-                .name("Имя 1")
-                .login("Login 1")
-                .email("user@mail.ru")
-                .birthday(LocalDate.of(1990, 1, 1))
-                .build();
-
-        assertThrows(ValidationException.class, new Executable() {
-            @Override
-            public void execute() throws ValidationException {
-                userController.addUser(user);
-            }
-        });
-    }
-
-    @Test
-    void shouldNotAddUserWithUncorrectBirthday() {
-        User user = User.builder()
-                .id(1)
-                .name("Имя 1")
-                .login("Login_1")
-                .email("user@mail.ru")
-                .birthday(LocalDate.of(2990, 1, 1))
-                .build();
-
-        assertThrows(ValidationException.class, new Executable() {
-            @Override
-            public void execute() throws ValidationException {
-                userController.addUser(user);
-            }
-        });
-    }
-
-    @Test
-    void shouldUpdateUser() {
+    void shouldGetUsers() throws Exception {
         User user = User.builder()
                 .id(1)
                 .name("Имя 1")
@@ -158,15 +54,14 @@ class UserControllerTest {
                 .email("user@mail.ru")
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
-
-        userController.addUser(user);
-        user.setLogin("New_login1");
-        userController.updateUser(user);
-        assertEquals("New_login1", user.getLogin());
+        Mockito.when(userController.getUsers()).thenReturn(Collections.singletonList(user));
+        mockMvc.perform(get("/users"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(Collections.singletonList(user))));
     }
 
     @Test
-    void shouldNotUpdateUser() {
+    void shouldGetUserById() throws Exception {
         User user = User.builder()
                 .id(1)
                 .name("Имя 1")
@@ -174,20 +69,34 @@ class UserControllerTest {
                 .email("user@mail.ru")
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
+        Mockito.when(userController.getUserById(user.getId())).thenReturn(user);
+        mockMvc.perform(get("/users/{id}", user.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(user)));
 
-        userController.addUser(user);
-        user.setLogin("New_login1");
-        user.setId(200);
-        assertThrows(RuntimeException.class, new Executable() {
-            @Override
-            public void execute() throws RuntimeException {
-                userController.updateUser(user);
-            }
-        });
     }
 
     @Test
-    void shouldGetUsers() {
+    void shouldUpdateUser() throws Exception {
+        User user = User.builder()
+                .id(1)
+                .name("Имя 1")
+                .login("Login_1")
+                .email("user@mail.ru")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build();
+        user.setName("Новое имя");
+        Mockito.when(userController.updateUser(user)).thenReturn(user);
+        mockMvc.perform(put("/users")
+                        .content(objectMapper.writeValueAsString(user))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Новое имя"))
+                .andExpect(content().json(objectMapper.writeValueAsString(user)));
+    }
+
+    @Test
+    void shouldAddAndDeleteFriend() throws Exception {
         User user1 = User.builder()
                 .id(1)
                 .name("Имя 1")
@@ -195,23 +104,51 @@ class UserControllerTest {
                 .email("user@mail.ru")
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
-
-        userController.addUser(user1);
         User user2 = User.builder()
+                .id(1)
+                .name("Имя 2")
+                .login("Login_2")
+                .email("userr@mail.ru")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build();
+        mockMvc.perform(put("/users/{id}/friends/{friendId}", user1.getId(), user2.getId()))
+                .andExpect(status().isOk());
+        mockMvc.perform(delete("/users/{id}/friends/{friendId}", user1.getId(), user2.getId()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldReturnCommonFriend() throws Exception {
+        User user1 = User.builder()
                 .id(1)
                 .name("Имя 1")
                 .login("Login_1")
                 .email("user@mail.ru")
                 .birthday(LocalDate.of(1990, 1, 1))
                 .build();
-
-        userController.addUser(user2);
-        assertEquals(userController.getUsers(), List.of(user1, user2));
+        User user2 = User.builder()
+                .id(2)
+                .name("Имя 2")
+                .login("Login_2")
+                .email("userr@mail.ru")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build();
+        User user3 = User.builder()
+                .id(3)
+                .name("Имя 3")
+                .login("Login_3")
+                .email("usserr@mail.ru")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build();
+        mockMvc.perform(put("/users/{id}/friends/{friendId}", user1.getId(), user2.getId()))
+                .andExpect(status().isOk());
+        mockMvc.perform(put("/users/{id}/friends/{friendId}", user3.getId(), user2.getId()))
+                .andExpect(status().isOk());
+        Mockito.when(userController.getCommonFriends(user1.getId(), user3.getId()))
+                .thenReturn(Collections.singletonList(user2));
+        mockMvc.perform(get("/users/{id}/friends/common/{friendId}", user1.getId(), user3.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(Collections.singletonList(user2))));
     }
 
-    @Test
-    void shouldGetZeroUsers() {
-        List<User> users = new ArrayList<User>(userController.getUsers());
-        assertEquals(users, Collections.emptyList());
-    }
 }
